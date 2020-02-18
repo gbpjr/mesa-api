@@ -20,7 +20,7 @@ Route.get('/', () => {
   return { greeting: 'Welcome to Mesa API' }
 })
 
-Route.post('users', 'UserController.create')
+Route.post('users', 'UserController.store')
 Route.get('users', 'UserController.show').middleware('auth')
 Route.put('users', 'UserController.update').middleware('auth')
 
