@@ -29,19 +29,32 @@ class PlaceController {
   }
 
   async map ({ request, response }) {
-    const ip = "170.80.115.9"
-    //const ip = request.ip()
-    const ll = geoip.lookup(ip).ll
-    const userPlace = {
-      'latitude': ll[0],
-      'longitude': ll[1]
-    }
-    let places = await Place.all()
-    places = places.toJSON()
-   
-    let sorted = geolib.orderByDistance(userPlace, places)
+
+    const ip = request.ip();
     
-    return sorted
+
+    try {
+      const ll = geoip.lookup(ip).ll
+
+      const userPlace = {
+        'latitude': ll[0],
+        'longitude': ll[1]
+      }
+      
+      let places = await Place.all()
+      places = places.toJSON()
+     
+      let sorted = geolib.orderByDistance(userPlace, places)
+      
+      return sorted
+
+    }catch{
+      const ll = 'unknown'
+      
+      const places = await Database.table('places').orderBy('title')
+
+      return places
+    }
   }
 
   /**
